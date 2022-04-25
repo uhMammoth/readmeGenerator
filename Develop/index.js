@@ -6,10 +6,11 @@ const generateMarkdown = require('./utils/generateMarkdown');
 
 // TODO: Create an array of questions for user input
 const descriptionQuestions = ['What is the name of your project?', 'What was your motivation?', 'Why did you build this project?', 'What problem does it solve?', 'What did you learn?', 'What makes your project stand out?'];
-const moduleQuestions = ['How can you install this application?', 'How can this application be used?', 'How can you contribute to this project?', 'What tests can you run for this application?', 'Enter your github username:', 'Enter an email for users to direct questions:'];
+const moduleQuestions = ['Select which licenses you would ike to use for this project', 'How can you install this application?', 'How can this application be used?', 'How can you contribute to this project?', 'What tests can you run for this application?', 'Enter your github username:', 'Enter an email for users to direct questions:'];
+const licenses = ['Apache','GNU', 'ISC', 'MIT', 'Mozilla', 'Open Data Commons', 'Perl'];
 
 const [name, motivation, why, problem, learn, stand] = descriptionQuestions;
-const [install, usage, contribute, test, github, email] = moduleQuestions;
+const [license, install, usage, contribute, test, github, email] = moduleQuestions;
 
 const promptQuestions = [{
     name: 'title',
@@ -17,8 +18,9 @@ const promptQuestions = [{
     type: 'input'
 },{
     name: 'license',
-    message: 'Enter the name(s) of licenses used for this application',
-    type: 'input'
+    message: license,
+    type: 'checkbox',
+    choices: licenses
 },{
     name: 'motivation',
     message: motivation,
@@ -78,14 +80,11 @@ function writeToFile(data) {
     })
 }
 
-
 // TODO: Create a function to initialize app
-function init() {
-    
-    inquirer.prompt(promptQuestions).then(answers => {
-        console.log(answers);
-            // let data = generateMarkdown(answers);
-            // writeToFile(data);
+function init() {    
+    inquirer.prompt(promptQuestions).then(answers => {        
+            let data = generateMarkdown(answers);
+            writeToFile(data);
         });
 }
 
